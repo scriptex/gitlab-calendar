@@ -1,0 +1,13 @@
+{
+	"extends": ["config:base", ":automergePatch", ":automergeBranch"],
+	"assignees": ["@scriptex"],
+	"labels": ["dependencies"],
+	"rebaseWhen": "conflicted",
+	"vulnerabilityAlerts": {
+		"labels": ["security"],
+		"assignees": ["@scriptex"]
+	},
+	"major": {
+		"automerge": false
+	}
+}
