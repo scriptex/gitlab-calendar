@@ -19,6 +19,8 @@ export type ActivityCalendarDay = {
 	text: string;
 };
 
+export type ActivityCalendarWeekday = 'monday' | 'wednesday' | 'friday' | 'saturday' | 'sunday';
+
 export type ActivityCalendarLegendValue = {
 	min: number;
 	title: string;
@@ -29,11 +31,14 @@ export type GitlabActivityCalendarOptions = {
 	hintText: string;
 	daySpace: number;
 	utcOffset: number;
+	dayTitles: Record<ActivityCalendarWeekday, string>;
 	monthsAgo: number;
 	monthNames: string[];
+	inputFormat: string;
 	weekdayNames: string[];
 	legendValues: ActivityCalendarLegendValue[];
 	firstDayOfWeek: number;
+	tooltipDateFormat: string;
 	tooltipFormatter: (count: number, dayName: string, dateText: string) => string;
 };
 
@@ -46,8 +51,16 @@ export class GitlabActivityCalendar {
 		hintText: 'Issues, merge requests, pushes, and comments.',
 		daySpace: 1,
 		utcOffset: 0,
+		dayTitles: {
+			monday: 'M',
+			wednesday: 'W',
+			friday: 'F',
+			saturday: 'S',
+			sunday: 'S'
+		},
 		monthsAgo: 12,
 		monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		inputFormat: 'YYYY-MM-DD',
 		weekdayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 		legendValues: [
 			{ title: 'No contributions', min: 0 },
@@ -57,6 +70,7 @@ export class GitlabActivityCalendar {
 			{ title: '30+ contributions', min: 30 }
 		],
 		firstDayOfWeek: 0,
+		tooltipDateFormat: 'MMM d, YYYY',
 		tooltipFormatter: (count: number, dayName: string, dateText: string) => {
 			let contribText = 'No contributions';
 
@@ -68,10 +82,10 @@ export class GitlabActivityCalendar {
 		}
 	};
 
-	public svg: ActivityCalendarSVG;
+	private svg: ActivityCalendarSVG;
 
-	public months: ActivityCalendarMonth[] = [];
-	public timestamps: Array<ActivityCalendarGroup[]> = [];
+	private months: ActivityCalendarMonth[] = [];
+	private timestamps: Array<ActivityCalendarGroup[]> = [];
 
 	public options: GitlabActivityCalendarOptions = this._defaultOptions;
 
@@ -81,7 +95,7 @@ export class GitlabActivityCalendar {
 			...options
 		};
 
-		const group = this.buildArrays(data, this.options);
+		const group = this.buildArrays(data);
 
 		this._daySizeWithSpace = this.options.daySize + this.options.daySpace * 2;
 
@@ -92,9 +106,10 @@ export class GitlabActivityCalendar {
 		this.renderDayTitles();
 		this.renderKey();
 		this.renderHint();
+		this.addTitles();
 	}
 
-	public buildArrays(data: Record<string, number>, options: GitlabActivityCalendarOptions): number {
+	private buildArrays(data: Record<string, number>): number {
 		let group = 0;
 
 		const today = this.getSystemDate(this.options.utcOffset);
@@ -114,7 +129,7 @@ export class GitlabActivityCalendar {
 
 			const day = date.getDay();
 
-			const count = data[format(date, 'yyyy-MM-dd')] || 0;
+			const count = data[format(date, this.options.inputFormat)] || 0;
 
 			if ((day === this.options.firstDayOfWeek && i !== 0) || i === 0) {
 				this.timestamps.push([]);
@@ -129,16 +144,16 @@ export class GitlabActivityCalendar {
 		return group;
 	}
 
-	public getDayName = (date: Date): string => this.options.weekdayNames[date.getDay()];
+	private getDayName = (date: Date): string => this.options.weekdayNames[date.getDay()];
 
-	public getDayDifference = (a: Date, b: Date): number => {
+	private getDayDifference = (a: Date, b: Date): number => {
 		const date1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
 		const date2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
 		return Math.floor((date2 - date1) / this._millisecondsPerDay);
 	};
 
-	public getSystemDate = (systemUtcOffsetSeconds: number): Date => {
+	private getSystemDate = (systemUtcOffsetSeconds: number): Date => {
 		const d = new Date();
 		const localUtcOffsetMinutes = 0 - d.getTimezoneOffset();
 		const systemUtcOffsetMinutes = systemUtcOffsetSeconds / 60;
@@ -148,15 +163,15 @@ export class GitlabActivityCalendar {
 		return d;
 	};
 
-	public formatTooltipText = ({ date, count }: { date: Date; count: number }): string => {
+	private formatTooltipText = ({ date, count }: { date: Date; count: number }): string => {
 		const d = new Date(date);
 		const dayName = this.getDayName(d);
-		const dateText = format(d, 'MMM d, yyyy');
+		const dateText = format(d, this.options.tooltipDateFormat);
 
 		return this.options.tooltipFormatter(count, dayName, dateText);
 	};
 
-	public getLevelFromContributions = (count: number) => {
+	private getLevelFromContributions = (count: number) => {
 		if (count <= 0) {
 			return 0;
 		}
@@ -166,7 +181,7 @@ export class GitlabActivityCalendar {
 		return nextLevel >= 0 ? nextLevel - 1 : this.options.legendValues.length - 1;
 	};
 
-	public getExtraWidthPadding(group: number): number {
+	private getExtraWidthPadding(group: number): number {
 		let extraWidthPadding = 0;
 
 		const lastColMonth = this.timestamps[group - 1][0].date.getMonth();
@@ -179,17 +194,17 @@ export class GitlabActivityCalendar {
 		return extraWidthPadding;
 	}
 
-	public renderSvg(container: HTMLElement, group: number): ActivityCalendarSVG {
+	private renderSvg(container: HTMLElement, group: number): ActivityCalendarSVG {
 		const width = (group + 1) * this._daySizeWithSpace + this.getExtraWidthPadding(group);
 
 		return select(container).append('svg').attr('width', width).attr('height', 167);
 	}
 
-	public dayYPos(day: number): number {
+	private dayYPos(day: number): number {
 		return this._daySizeWithSpace * ((day + 7 - this.options.firstDayOfWeek) % 7);
 	}
 
-	public renderDays(): void {
+	private renderDays(): void {
 		this.svg
 			.selectAll('g')
 			.data(this.timestamps)
@@ -225,7 +240,7 @@ export class GitlabActivityCalendar {
 			.attr('title', (stamp: ActivityCalendarGroup) => this.formatTooltipText(stamp));
 	}
 
-	public renderDayTitles(): void {
+	private renderDayTitles(): void {
 		const firstDayOfWeekChoices: Record<'sunday' | 'monday' | 'saturday', number> = {
 			sunday: 0,
 			monday: 1,
@@ -234,27 +249,27 @@ export class GitlabActivityCalendar {
 
 		const days: ActivityCalendarDay[] = [
 			{
-				text: 'M',
+				text: this.options.dayTitles.monday,
 				y: 29 + this.dayYPos(1)
 			},
 			{
-				text: 'W',
+				text: this.options.dayTitles.wednesday,
 				y: 29 + this.dayYPos(3)
 			},
 			{
-				text: 'F',
+				text: this.options.dayTitles.friday,
 				y: 29 + this.dayYPos(5)
 			}
 		];
 
 		if (this.options.firstDayOfWeek === firstDayOfWeekChoices.monday) {
 			days.push({
-				text: 'S',
+				text: this.options.dayTitles.sunday,
 				y: 29 + this.dayYPos(7)
 			});
 		} else if (this.options.firstDayOfWeek === firstDayOfWeekChoices.saturday) {
 			days.push({
-				text: 'S',
+				text: this.options.dayTitles.saturday,
 				y: 29 + this.dayYPos(6)
 			});
 		}
@@ -271,7 +286,7 @@ export class GitlabActivityCalendar {
 			.text((day: ActivityCalendarDay) => day.text);
 	}
 
-	public renderMonths(): void {
+	private renderMonths(): void {
 		this.svg
 			.append('g')
 			.selectAll('text')
@@ -283,7 +298,7 @@ export class GitlabActivityCalendar {
 			.text((date: ActivityCalendarMonth) => this.options.monthNames[date.month]);
 	}
 
-	public renderKey(): void {
+	private renderKey(): void {
 		this.svg
 			.append('g')
 			.attr('transform', `translate(18, ${this._daySizeWithSpace * 8 + 16})`)
@@ -299,7 +314,7 @@ export class GitlabActivityCalendar {
 			.attr('title', x => x.title);
 	}
 
-	public renderHint(): void {
+	private renderHint(): void {
 		this.svg
 			.append('g')
 			.attr(
@@ -308,7 +323,28 @@ export class GitlabActivityCalendar {
 			)
 			.append('text')
 			.attr('text-anchor', 'end')
-			.text('Issues, merge requests, pushes, and comments.');
+			.text(this.options.hintText);
+	}
+
+	private addTitles(): void {
+		this.svg.selectAll('rect').each(function () {
+			const rect: SVGRectElement | null = this as SVGRectElement | null;
+
+			if (!rect) {
+				return;
+			}
+
+			const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+			const titleString = rect.getAttribute('title') || '';
+			const titleElement = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+
+			rect?.parentNode?.insertBefore(group, rect);
+
+			titleElement.innerHTML = titleString;
+
+			group.appendChild(titleElement);
+			group.appendChild(rect);
+		});
 	}
 }
 

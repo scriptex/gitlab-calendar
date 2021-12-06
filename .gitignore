@@ -19,3 +19,4 @@ Thumbs.db
 
 # Project specific
 dist
+/demo/gitlab-calendar.js

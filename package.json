@@ -1,6 +1,6 @@
 {
 	"name": "gitlab-calendar",
-	"version": "1.0.0",
+	"version": "0.0.0",
 	"description": "Embed your Gitlab Contributions Calendar anywhere",
 	"keywords": [],
 	"homepage": "https://atanas.info/projects/gitlab-calendar.html",
@@ -28,12 +28,12 @@
 			"url": "https://ko-fi.com/scriptex"
 		}
 	],
-	"main": "index.js",
+	"main": "dist/gitlab-calendar.js",
+	"typings": "dist/gitlab-calendar.d.ts",
 	"repository": "https://github.com/scriptex/gitlab-calendar",
 	"scripts": {
 		"start": "tsc --watch",
-		"build": "tsc",
-		"test": "echo 'No tests found'",
+		"build": "rm -rf dist && tsc && cp ./dist/gitlab-calendar.js ./demo/gitlab-calendar.js",
 		"release-minor": "release-it minor --ci",
 		"release-patch": "release-it patch --ci",
 		"release-major": "release-it major --ci",
@@ -41,18 +41,17 @@
 	},
 	"dependencies": {
 		"d3-selection": "3.0.0",
-		"date-fns": "2.26.0",
-		"release-it": "14.11.8"
+		"date-fns": "2.27.0"
 	},
 	"devDependencies": {
-		"@types/d3-selection": "3.0.1",
+		"@types/d3-selection": "3.0.2",
+		"release-it": "14.11.8",
 		"typescript": "4.5.2"
 	},
 	"peerDependencies": {
 		"d3-selection": "3.0.0",
 		"date-fns": "2.26.0"
 	},
-	"private": true,
 	"release-it": {
 		"hooks": {
 			"after:release": "yarn changelog-local && git add CHANGELOG.md && git commit -m \"Update CHANGELOG.md with the latest changes\" && git push"

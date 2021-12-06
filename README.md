@@ -21,7 +21,68 @@
 [![Renovate App Status][renovateapp-img]][renovateapp-url]
 [![Make A Pull Request][prs-welcome-img]][prs-welcome-url]
 
+This package allows you to embed your Gitlab Contributions Calendar in any website.
+
+The package does not handle network requests, this is left to the developer to decide and implement. Gitlab Calendar requires the data as it is provided by the `calendar` endpoint of the Gitlab API (https://gitlab.com/users/$USER/calendar.json).
+
+**This project was inspired by [Github Calendar](https://github.com/Bloggify/github-calendar).**
+
+## Live preview ([link](https://atanas.info/stats))
+
+![Gitlab Calendar Screenshot](./assets/gitlab-calendar.png)
+
+## Installation
+
+```sh
+npm i gitlab-calendar
+
+# or
+
+yarn add gitlab-calendar
+```
+
 ## Usage
+
+```typescript
+import GitlabCalendar from 'gitlab-calendar';
+
+new GitlabActivityCalendar(document.getElementById('gitlab-calendar'), data, options);
+```
+
+## Data format
+
+The data is obtained by fetching the `https://gitlab.com/users/$USER/calendar.json` endpoint.
+
+This exercise is left to the developer implementing it.
+
+`gitlab-calendar` requires the data in the following format:
+
+```json
+{
+    "2020-12-07": 1,
+    "2020-12-09": 2,
+    "2020-12-10": 5,
+    ...
+}
+```
+
+## Options
+
+| Name                | Type                                                           | Default value                                                                                                                                                                                                                                                                                              |
+| ------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `daySize`           | `number`                                                       | 15                                                                                                                                                                                                                                                                                                         |
+| `hintText`          | `string`                                                       | 'Issues, merge requests, pushes, and comments.'                                                                                                                                                                                                                                                            |
+| `daySpace`          | `number`                                                       | 1                                                                                                                                                                                                                                                                                                          |
+| `utcOffset`         | `number`                                                       | 0                                                                                                                                                                                                                                                                                                          |
+| `dayTitles`         | `Record<ActivityCalendarWeekday, string>`                      | <pre lang="json">{ <br> monday: 'M', <br> wednesday: 'W', <br> friday: 'F', <br> saturday: 'S', <br> sunday: 'S' <br>}</pre>                                                                                                                                                                               |
+| `monthsAgo`         | `number`                                                       | 12                                                                                                                                                                                                                                                                                                         |
+| `monthNames`        | `string[]`                                                     | ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']                                                                                                                                                                                                                       |
+| `inputFormat`       | `string`                                                       | 'yyyy-MM-dd'                                                                                                                                                                                                                                                                                               |
+| `weekdayNames`      | `string[]`                                                     | ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']                                                                                                                                                                                                                             |
+| `legendValues`      | `ActivityCalendarLegendValue[]`                                | <pre lang="json">[ <br> { title: 'No contributions', min: 0 }, <br> { title: '1-9 contributions', min: 1 }, <br> { title: '10-19 contributions', min: 10 }, <br> { title: '20-29 contributions', min: 20 }, <br> { title: '30+ contributions', min: 30 } <br>]</pre>                                       |
+| `firstDayOfWeek`    | `number`                                                       | 0                                                                                                                                                                                                                                                                                                          |
+| `tooltipDateFormat` | `string`                                                       | 'MMM d, yyyy'                                                                                                                                                                                                                                                                                              |
+| `tooltipFormatter`  | `(count: number, dayName: string, dateText: string) => string` | <pre lang="json">(count: number, dayName: string, dateText: string) => { <br />let contribText = 'No contributions';<br /><br />if (count > 0) {<br />contribText = count === 1 ? '1 contribution' : `${count} contributions`;<br /><br />}return `${contribText} on ${dayName} ${dateText}`;<br />}</pre> |
 
 ## Support this project
 
