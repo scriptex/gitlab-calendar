@@ -1,6 +1,6 @@
 {
 	"name": "gitlab-calendar",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "Embed your Gitlab Contributions Calendar anywhere",
 	"keywords": [],
 	"homepage": "https://atanas.info/projects/gitlab-calendar.html",
