@@ -36,15 +36,14 @@ yarn.lock
 
 # Config files
 .github
-.babelrc
+.nowignore
 .nvmrc
 .whitesource
 renovate.json
-tslint.json
 tsconfig.json
-postcss.config.js
-webpack.config.js
 _config.yml
 _.config.yml
 
 # Project specific
+assets
+demo
