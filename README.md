@@ -29,7 +29,7 @@ The package does not handle network requests, this is left to the developer to d
 
 ## Live preview ([link](https://atanas.info/stats))
 
-![Gitlab Calendar Screenshot](./assets/gitlab-calendar.png)
+![Gitlab Calendar Screenshot](https://raw.githubusercontent.com/scriptex/gitlab-calendar/master/assets/gitlab-calendar.png)
 
 ## Installation
 
