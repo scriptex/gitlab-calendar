@@ -41,7 +41,7 @@
 	},
 	"dependencies": {
 		"d3-selection": "3.0.0",
-		"date-fns": "2.29.1"
+		"date-fns": "2.29.2"
 	},
 	"devDependencies": {
 		"@types/d3-selection": "3.0.3",
@@ -50,7 +50,7 @@
 	},
 	"peerDependencies": {
 		"d3-selection": "3.0.0",
-		"date-fns": "2.29.1"
+		"date-fns": "2.29.2"
 	},
 	"release-it": {
 		"hooks": {
