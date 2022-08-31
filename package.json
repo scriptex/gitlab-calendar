@@ -45,7 +45,7 @@
 	},
 	"devDependencies": {
 		"@types/d3-selection": "3.0.3",
-		"release-it": "15.4.0",
+		"release-it": "15.4.1",
 		"typescript": "4.8.2"
 	},
 	"peerDependencies": {
