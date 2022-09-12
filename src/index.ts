@@ -338,7 +338,7 @@ export class GitlabCalendar {
 			const titleString = rect.getAttribute('title') || '';
 			const titleElement = document.createElementNS('http://www.w3.org/2000/svg', 'title');
 
-			rect?.parentNode?.insertBefore(group, rect);
+			rect.parentNode?.insertBefore(group, rect);
 
 			titleElement.innerHTML = titleString;
 

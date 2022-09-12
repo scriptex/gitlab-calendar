@@ -17,7 +17,7 @@
 	"author": "Atanas Atanasov <hi@atanas.info> (https://atanas.info)",
 	"funding": "https://github.com/sponsors/scriptex",
 	"main": "dist/index.js",
-	"typings": "dist/index.d.ts",
+	"types": "dist/index.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "github:scriptex/gitlab-calendar"

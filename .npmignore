@@ -38,5 +38,6 @@ tslint.json
 webpack.config.js
 yarn.lock
 
+assets
 demo
 !dist
