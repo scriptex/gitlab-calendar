@@ -79,7 +79,7 @@
 	</head>
 	<body>
 		<a
-			href="https://github.com/scriptex/dator"
+			href="https://github.com/scriptex/gitlab-calendar"
 			title="See code on Github"
 			class="github-fork-ribbon"
 			data-ribbon="See code on Github"
@@ -93,18 +93,17 @@
 
 		<social-links></social-links>
 
-		<script type="module">
-			fetch('https://raw.githubusercontent.com/scriptex/atanas.info/master/src/data/gitlab-calendar.json')
-				.then(r => r.text())
-				.then(r => {
-					const data = JSON.parse(r);
+		<script>
+			(async () => {
+				const res = await fetch(
+					'https://raw.githubusercontent.com/scriptex/atanas.info/master/src/data/gitlab-calendar.json'
+				);
+				const data = await res.json();
 
-					console.log(data);
-
-					requirejs(['./dist/index.js'], ({ GitlabCalendar }) => {
-						new GitlabCalendar(document.getElementById('calendar'), data);
-					});
+				requirejs(['./dist/index.js'], ({ GitlabCalendar }) => {
+					new GitlabCalendar(document.getElementById('calendar'), data);
 				});
+			})();
 		</script>
 	</body>
 </html>
