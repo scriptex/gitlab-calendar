@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import format from 'date-fns/format';
 import { select, Selection } from 'd3-selection';
 
 export type ActivityCalendarSVG = Selection<SVGSVGElement, unknown, null, undefined>;
@@ -26,7 +26,7 @@ export type ActivityCalendarLegendValue = {
 	title: string;
 };
 
-export type GitlabActivityCalendarOptions = {
+export type GitlabCalendarOptions = {
 	daySize: number;
 	hintText: string;
 	daySpace: number;
@@ -42,11 +42,11 @@ export type GitlabActivityCalendarOptions = {
 	tooltipFormatter: (count: number, dayName: string, dateText: string) => string;
 };
 
-export class GitlabActivityCalendar {
+export class GitlabCalendar {
 	private _daySizeWithSpace = 0;
 	private _millisecondsPerDay = 1000 * 60 * 60 * 24;
 
-	private _defaultOptions: GitlabActivityCalendarOptions = {
+	private _defaultOptions: GitlabCalendarOptions = {
 		daySize: 15,
 		hintText: 'Issues, merge requests, pushes, and comments.',
 		daySpace: 1,
@@ -60,7 +60,7 @@ export class GitlabActivityCalendar {
 		},
 		monthsAgo: 12,
 		monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		inputFormat: 'YYYY-MM-DD',
+		inputFormat: 'yyyy-MM-dd',
 		weekdayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 		legendValues: [
 			{ title: 'No contributions', min: 0 },
@@ -70,7 +70,7 @@ export class GitlabActivityCalendar {
 			{ title: '30+ contributions', min: 30 }
 		],
 		firstDayOfWeek: 0,
-		tooltipDateFormat: 'MMM d, YYYY',
+		tooltipDateFormat: 'MMM d, yyyy',
 		tooltipFormatter: (count: number, dayName: string, dateText: string) => {
 			let contribText = 'No contributions';
 
@@ -87,9 +87,9 @@ export class GitlabActivityCalendar {
 	private months: ActivityCalendarMonth[] = [];
 	private timestamps: Array<ActivityCalendarGroup[]> = [];
 
-	public options: GitlabActivityCalendarOptions = this._defaultOptions;
+	public options: GitlabCalendarOptions = this._defaultOptions;
 
-	constructor(container: HTMLElement, data: Record<string, number>, options: Partial<GitlabActivityCalendarOptions>) {
+	constructor(container: HTMLElement, data: Record<string, number>, options: Partial<GitlabCalendarOptions>) {
 		this.options = {
 			...this._defaultOptions,
 			...options
@@ -348,4 +348,4 @@ export class GitlabActivityCalendar {
 	}
 }
 
-export default GitlabActivityCalendar;
+export default GitlabCalendar;
