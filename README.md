@@ -49,7 +49,7 @@ yarn add gitlab-calendar
 ```typescript
 import GitlabCalendar from 'gitlab-calendar';
 
-new GitlabActivityCalendar(document.getElementById('gitlab-calendar'), data, options);
+new GitlabCalendar(document.getElementById('gitlab-calendar'), data, options);
 ```
 
 ## Data format
