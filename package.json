@@ -1,6 +1,6 @@
 {
 	"name": "gitlab-calendar",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "Embed your Gitlab Contributions Calendar anywhere",
 	"keywords": [
 		"Calendar",
