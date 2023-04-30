@@ -37,7 +37,7 @@
 		"@types/d3-selection": "3.0.5",
 		"d3-selection": "3.0.0",
 		"date-fns": "2.30.0",
-		"release-it": "15.10.1",
+		"release-it": "15.10.2",
 		"ts-loader": "9.4.2",
 		"typescript": "5.0.4",
 		"webpack": "5.81.0",
