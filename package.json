@@ -39,7 +39,7 @@
 		"date-fns": "2.30.0",
 		"release-it": "17.0.0",
 		"ts-loader": "9.5.1",
-		"typescript": "5.3.2",
+		"typescript": "5.3.3",
 		"webpack": "5.89.0",
 		"webpack-cli": "5.1.4"
 	},
