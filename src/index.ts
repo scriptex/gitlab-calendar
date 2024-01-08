@@ -1,4 +1,4 @@
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 import { select, Selection } from 'd3-selection';
 
 export type ActivityCalendarSVG = Selection<SVGSVGElement, unknown, null, undefined>;
