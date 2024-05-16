@@ -70,9 +70,9 @@
 			}
 		</style>
 
-		<script src="https://unpkg.com/moment"></script>
-		<script src="https://unpkg.com/requirejs"></script>
-		<script src="https://unpkg.com/scriptex-socials"></script>
+		<script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/scriptex-socials/dist/index.min.js"></script>
 
 		<script>
 			(function (d, h, m) {
@@ -113,7 +113,7 @@
 
 		<script>
 			function randomInt(min, max) {
-				return Math.floor(Math.random() * (max - min + 1) + min);
+				return Math.floor(Math.random() * (max - min + 1) + min); // NOSONAR
 			}
 
 			var len = 365;
