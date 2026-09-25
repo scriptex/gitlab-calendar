@@ -37,10 +37,10 @@
 		"@types/d3-selection": "3.0.12",
 		"d3-selection": "3.0.0",
 		"date-fns": "4.4.0",
-		"release-it": "21.0.3",
+		"release-it": "21.1.0",
 		"ts-loader": "9.6.2",
 		"typescript": "5.9.3",
-		"webpack": "5.110.3",
+		"webpack": "5.111.1",
 		"webpack-cli": "7.2.3"
 	},
 	"release-it": {
